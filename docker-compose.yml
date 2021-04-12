@@ -1,0 +1,17 @@
+---
+version: '3'
+
+services:
+  s3-ftarc:
+    container_name: s3-ftarc
+    build:
+      context: ./ftarc
+      dockerfile: Dockerfile
+    image: dceoy/s3-ftarc:aws
+    user: ${UID}:${GID}
+    userns_mode: host
+    volumes:
+      - .:/wd
+    working_dir: /wd
+    entrypoint:
+      - /usr/local/bin/s3-sync-entrypoint
