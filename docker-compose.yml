@@ -2,12 +2,12 @@
 version: '3'
 
 services:
-  s3-ftarc:
-    container_name: s3-ftarc
+  aws-ftarc:
+    container_name: aws-ftarc
     build:
       context: ./ftarc
       dockerfile: Dockerfile
-    image: dceoy/s3-ftarc:aws
+    image: dceoy/aws-ftarc:latest
     user: ${UID}:${GID}
     userns_mode: host
     volumes:

@@ -13,15 +13,19 @@ RUN set -e \
       && rm -rf /var/lib/apt/lists/*
 
 RUN set -e \
+      && chmod +x /usr/local/bin/s3-sync-entrypoint
+
+RUN set -e \
       && cd /tmp \
       && unzip awscli.zip \
       && ./aws/install
 
-ENV LOCAL_INPUT_DIR /input
-ENV LOCAL_OUTPUT_DIR /output
-
 RUN set -e \
-      && mkdir "${LOCAL_INPUT_DIR}" "${LOCAL_OUTPUT_DIR}" \
-      && chmod +x /usr/local/bin/s3-sync-entrypoint
+      && /opt/conda/bin/python3 -m pip install -U --no-cache-dir \
+        https://github.com/dceoy/ftarc/archive/main.tar.gz
+
+ENV INPUT_DATA_DIR /input
+ENV OUTPUT_DATA_DIR /output
 
 ENTRYPOINT ["/usr/local/bin/s3-sync-entrypoint"]
+CMD ["ftarc"]
