@@ -2,12 +2,38 @@
 version: '3'
 
 services:
-  aws-ftarc:
-    container_name: aws-ftarc
+  ftarc:
+    container_name: ftarc
     build:
-      context: ./ftarc
+      context: ./build/ftarc
       dockerfile: Dockerfile
-    image: dceoy/aws-ftarc:latest
+    image: dceoy/ftarc:latest
+    user: ${UID}:${GID}
+    userns_mode: host
+    volumes:
+      - .:/wd
+    working_dir: /wd
+    entrypoint:
+      - /usr/local/bin/s3-sync-entrypoint
+  vcline:
+    container_name: vcline
+    build:
+      context: ./build/vcline
+      dockerfile: Dockerfile
+    image: dceoy/vcline:latest
+    user: ${UID}:${GID}
+    userns_mode: host
+    volumes:
+      - .:/wd
+    working_dir: /wd
+    entrypoint:
+      - /usr/local/bin/s3-sync-entrypoint
+  vanqc:
+    container_name: vanqc
+    build:
+      context: ./build/vanqc
+      dockerfile: Dockerfile
+    image: dceoy/vanqc:latest
     user: ${UID}:${GID}
     userns_mode: host
     volumes:

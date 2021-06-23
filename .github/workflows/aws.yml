@@ -50,12 +50,15 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ftarc
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REPOSITORY
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          for i in $(ls ./build); do
+            docker-compose build "${i}" \
+              && docker image tag "${i}:latest" "${ECR_REGISTRY}/${i}:${IMAGE_TAG}" \
+              && docker image push "${ECR_REGISTRY}/${i}:${IMAGE_TAG}"
+            echo "::set-output name=image::${ECR_REGISTRY}/${i}:${IMAGE_TAG}"
+          done
+
 #     - name: Fill in the new image ID in the Amazon ECS task definition
 #       id: task-def
 #       uses: aws-actions/amazon-ecs-render-task-definition@v1
