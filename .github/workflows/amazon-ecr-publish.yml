@@ -55,7 +55,7 @@ jobs:
         run: |
           for i in $(ls ./build); do
             docker-compose build "${i}" \
-              && docker image tag "${i}:latest" "${ECR_REGISTRY}/${i}:${IMAGE_TAG}" \
+              && docker image tag "${{ github.actor }}/${i}:latest" "${ECR_REGISTRY}/${i}:${IMAGE_TAG}" \
               && docker image push "${ECR_REGISTRY}/${i}:${IMAGE_TAG}"
             echo "::set-output name=image::${ECR_REGISTRY}/${i}:${IMAGE_TAG}"
           done
