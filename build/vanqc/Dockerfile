@@ -1,7 +1,7 @@
 FROM dceoy/vanqc:latest
 
 ADD https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip /tmp/awscli.zip
-ADD https://raw.githubusercontent.com/dceoy/aws-s3-sync-entrypoint/main/s3-sync-entrypoint /usr/local/bin/s3-sync-entrypoint
+ADD https://raw.githubusercontent.com/dceoy/s3-sync-entrypoint/main/s3-sync-entrypoint /usr/local/bin/s3-sync-entrypoint
 
 RUN set -e \
       && apt-get -y update \
