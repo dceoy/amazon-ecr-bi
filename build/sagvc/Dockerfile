@@ -1,4 +1,4 @@
-FROM dceoy/vcline:latest
+FROM dceoy/sagvc:latest
 
 ADD https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip /tmp/awscli.zip
 ADD https://raw.githubusercontent.com/dceoy/s3-sync-entrypoint/main/s3-sync-entrypoint /usr/local/bin/s3-sync-entrypoint
@@ -24,10 +24,10 @@ RUN set -e \
       && /opt/conda/bin/python3 -m pip install -U --no-cache-dir \
         https://github.com/dceoy/ftarc/archive/main.tar.gz \
         https://github.com/dceoy/vanqc/archive/main.tar.gz \
-        https://github.com/dceoy/vcline/archive/master.tar.gz
+        https://github.com/dceoy/sagvc/archive/master.tar.gz
 
 ENV INPUT_DATA_DIR /input
 ENV OUTPUT_DATA_DIR /output
 
 ENTRYPOINT ["/usr/local/bin/s3-sync-entrypoint"]
-CMD ["vcline"]
+CMD ["sagvc"]
