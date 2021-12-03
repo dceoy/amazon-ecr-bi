@@ -24,7 +24,7 @@ RUN set -e \
       && /opt/conda/bin/python3 -m pip install -U --no-cache-dir \
         https://github.com/dceoy/ftarc/archive/main.tar.gz \
         https://github.com/dceoy/vanqc/archive/main.tar.gz \
-        https://github.com/dceoy/sagvc/archive/master.tar.gz
+        https://github.com/dceoy/sagvc/archive/main.tar.gz
 
 ENV INPUT_DATA_DIR /input
 ENV OUTPUT_DATA_DIR /output
