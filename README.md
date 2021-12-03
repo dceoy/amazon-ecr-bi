@@ -1,6 +1,6 @@
-aws-ecr-bio
-===========
+amazon-ecr-bi
+=============
 
-Docker Images for Bioinformatic Pipelines on AWS
+Bioinformatic Docker Images for AWS
 
-[![Deploy to Amazon ECS](https://github.com/dceoy/aws-ecr-bio/actions/workflows/amazon-ecr-publish.yml/badge.svg)](https://github.com/dceoy/aws-ecr-bio/actions/workflows/amazon-ecr-publish.yml)
+[![Deploy to Amazon ECS](https://github.com/dceoy/amazon-ecr-bi/actions/workflows/amazon-ecr-publish.yml/badge.svg)](https://github.com/dceoy/amazon-ecr-bi/actions/workflows/amazon-ecr-publish.yml)
