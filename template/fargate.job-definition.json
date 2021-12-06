@@ -1,0 +1,42 @@
+{
+  "jobDefinitionName": "",
+  "type": "container",
+  "containerProperties": {
+    "image": "",
+    "command": [
+      "--version"
+    ],
+    "jobRoleArn": "",
+    "executionRoleArn": "",
+    "environment": [
+      {
+        "name": "INPUT_DATA_DIR",
+        "value": "/input"
+      },
+      {
+        "name": "OUTPUT_DATA_DIR",
+        "value": "/output"
+      }
+    ],
+    "readonlyRootFilesystem": true,
+    "resourceRequirements": [
+      {
+        "value": "1",
+        "type": "VCPU"
+      },
+      {
+        "value": "2048",
+        "type": "MEMORY"
+      }
+    ],
+    "networkConfiguration": {
+        "assignPublicIp": "ENABLED"
+    },
+    "fargatePlatformConfiguration": {
+      "platformVersion": "LATEST"
+    }
+  },
+  "platformCapabilities": [
+    "FARGATE"
+  ]
+}

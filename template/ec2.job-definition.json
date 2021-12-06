@@ -1,0 +1,41 @@
+{
+  "jobDefinitionName": "",
+  "type": "container",
+  "containerProperties": {
+    "image": "",
+    "vcpus": 1,
+    "memory": 1024,
+    "command": [
+      "--version"
+    ],
+    "jobRoleArn": "",
+    "executionRoleArn": "",
+    "environment": [
+      {
+        "name": "INPUT_DATA_DIR",
+        "value": "/input"
+      },
+      {
+        "name": "OUTPUT_DATA_DIR",
+        "value": "/output"
+      }
+    ]
+  },
+  "retryStrategy": {
+    "attempts": 2,
+    "evaluateOnExit": [
+      {
+        "onStatusReason": "",
+        "onReason": "",
+        "onExitCode": "",
+        "action": "EXIT"
+      }
+    ]
+  },
+  "timeout": {
+    "attemptDurationSeconds": 86400
+  },
+  "platformCapabilities": [
+    "EC2"
+  ]
+}

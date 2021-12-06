@@ -34,26 +34,31 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-  # environment: production
+    # environment: production
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Install jq
+        run: |
+          sudo apt-get -y update
+          sudo apt-get -y install --no-install-recommends --no-install-suggests jq
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-1
+          aws-region: ${{ secrets.AWS_REGION }}
       - name: Login to Amazon ECR
-        id: login-ecr
+        id: login-amazon-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      - name: Build, tag, and push image to Amazon ECR
-        id: build-image
+      - name: Build, tag, and push images to Amazon ECR
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: ${{ steps.login-amazon-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           for i in $(ls ./build); do
+            aws ecr describe-repositories --repository-names "${i}" \
+              || aws ecr create-repository --repository-name "${i}"
             docker-compose build "${i}" \
               && docker image tag "${{ github.repository_owner }}/${i}:latest" "${ECR_REGISTRY}/${i}:latest" \
               && docker image tag "${ECR_REGISTRY}/${i}:latest" "${ECR_REGISTRY}/${i}:${IMAGE_TAG}" \
@@ -61,7 +66,24 @@ jobs:
               && docker image push "${ECR_REGISTRY}/${i}:${IMAGE_TAG}"
             echo "::set-output name=image::${ECR_REGISTRY}/${i}:${IMAGE_TAG}"
           done
-
+      - name: Create
+        env:
+          ECR_REGISTRY: ${{ steps.login-amazon-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+          JOB_ROLE_ARN: ${{ secrets.JOB_ROLE_ARN }}
+          EXECUTION_ROLE_ARN: ${{ secrets.EXECUTION_ROLE_ARN }}
+        run: |
+          for i in $(ls ./build); do
+            for p in 'ec2' 'fargate'; do
+              cat template/${p}.job-definition.json \
+                | jq ".jobDefinitionName=\"${p}-${i}\"" \
+                | jq ".containerProperties.image=\"${ECR_REGISTRY}/${i}:${IMAGE_TAG}\"" \
+                | jq ".containerProperties.jobRoleArn=\"${JOB_ROLE_ARN}\"" \
+                | jq ".containerProperties.executionRoleArn=\"${EXECUTION_ROLE_ARN}\"" \
+                | tee "${i}.${p}.job-definition.json"
+              aws batch register-job-definition --cli-input-json "file://${i}.${p}.job-definition.json"
+            done
+          done
 #     - name: Fill in the new image ID in the Amazon ECS task definition
 #       id: task-def
 #       uses: aws-actions/amazon-ecs-render-task-definition@v1
