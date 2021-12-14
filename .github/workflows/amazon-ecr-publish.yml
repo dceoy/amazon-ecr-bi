@@ -49,7 +49,7 @@ jobs:
         run: |
           for i in $(ls ./build); do
             for p in 'ec2' 'fargate'; do
-              cat template/${p}.job-definition.json \
+              cat template/${p}.job-definition.j2.json \
                 | jq ".jobDefinitionName=\"${p}-${i}\"" \
                 | jq ".containerProperties.image=\"${ECR_REGISTRY}/${i}:${IMAGE_TAG}\"" \
                 | jq ".containerProperties.jobRoleArn=\"${JOB_ROLE_ARN}\"" \

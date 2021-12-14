@@ -1,15 +1,15 @@
 {
-  "jobDefinitionName": "",
+  "jobDefinitionName": "{{ job_definition_name }}",
   "type": "container",
   "containerProperties": {
-    "image": "",
+    "image": "{{ image }}",
     "vcpus": 1,
     "memory": 1024,
     "command": [
       "--version"
     ],
-    "jobRoleArn": "",
-    "executionRoleArn": "",
+    "jobRoleArn": "{{ job_role_arn }}",
+    "executionRoleArn": "{{ execution_role_arn }}",
     "environment": [
       {
         "name": "INPUT_DATA_DIR",
