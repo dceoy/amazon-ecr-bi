@@ -28,5 +28,9 @@ RUN set -e \
 ENV INPUT_DATA_DIR /input
 ENV OUTPUT_DATA_DIR /output
 
+RUN set -e \
+      && mkdir -p "${INPUT_DATA_DIR}" "${OUTPUT_DATA_DIR}" \
+      && chmod 777 "${INPUT_DATA_DIR}" "${OUTPUT_DATA_DIR}"
+
 ENTRYPOINT ["/usr/local/bin/s3-sync-entrypoint"]
 CMD ["vanqc"]
