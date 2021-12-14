@@ -13,7 +13,7 @@ RUN set -e \
       && rm -rf /var/lib/apt/lists/*
 
 RUN set -e \
-      && chmod 755 /usr/local/bin/s3-sync-entrypoint
+      && chmod +x /usr/local/bin/s3-sync-entrypoint
 
 RUN set -e \
       && cd /tmp \
