@@ -41,3 +41,16 @@ services:
     working_dir: /wd
     entrypoint:
       - /usr/local/bin/s3-sync-entrypoint
+  replace-sam-read-group:
+    container_name: replace-sam-read-group
+    build:
+      context: ./build/replace-sam-read-group
+      dockerfile: Dockerfile
+    image: dceoy/replace-sam-read-group:latest
+    user: ${UID}:${GID}
+    userns_mode: host
+    volumes:
+      - .:/wd
+    working_dir: /wd
+    entrypoint:
+      - /usr/local/bin/s3-sync-entrypoint
