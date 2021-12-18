@@ -1,10 +1,6 @@
 {
   "jobDefinitionName": "{{ job_definition_name }}",
   "type": "container",
-  "parameters": {
-    "inputDataDir": "/input",
-    "outputDataDir": "/output"
-  },
   "containerProperties": {
     "image": "{{ image }}",
     "vcpus": 0,
@@ -17,11 +13,11 @@
     "environment": [
       {
         "name": "INPUT_DATA_DIR",
-        "value": "Ref::inputDataDir"
+        "value": "/input"
       },
       {
         "name": "OUTPUT_DATA_DIR",
-        "value": "Ref::outputDataDir"
+        "value": "/output"
       }
     ],
     "readonlyRootFilesystem": false,
