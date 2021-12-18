@@ -3,8 +3,6 @@
   "type": "container",
   "containerProperties": {
     "image": "{{ image }}",
-    "vcpus": 0,
-    "memory": 0,
     "command": [
       "--version"
     ],
@@ -22,7 +20,17 @@
     ],
     "readonlyRootFilesystem": false,
     "privileged": false,
-    "user": "root"
+    "user": "root",
+    "resourceRequirements": [
+      {
+        "type": "VCPU",
+        "value": "1"
+      },
+      {
+        "type": "MEMORY",
+        "value": "2048"
+      }
+    ]
   },
   "retryStrategy": {
     "attempts": 5

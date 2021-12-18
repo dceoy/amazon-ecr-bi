@@ -24,11 +24,11 @@
     "resourceRequirements": [
       {
         "type": "VCPU",
-        "value": "0"
+        "value": "0.25"
       },
       {
         "type": "MEMORY",
-        "value": "0"
+        "value": "512"
       }
     ],
     "networkConfiguration": {
