@@ -1,8 +1,14 @@
 {
   "jobDefinitionName": "{{ job_definition_name }}",
   "type": "container",
+  "parameters": {
+    "input_data_dir": "/input",
+    "output_data_dir": "/output"
+  },
   "containerProperties": {
     "image": "{{ image }}",
+    "vcpus": 0,
+    "memory": 0,
     "command": [
       "--version"
     ],
@@ -11,30 +17,38 @@
     "environment": [
       {
         "name": "INPUT_DATA_DIR",
-        "value": "/input"
+        "value": "Ref::input_data_dir"
       },
       {
         "name": "OUTPUT_DATA_DIR",
-        "value": "/output"
+        "value": "Ref::output_data_dir"
       }
     ],
     "readonlyRootFilesystem": false,
+    "privileged": false,
+    "user": "root",
     "resourceRequirements": [
       {
-        "value": "1",
-        "type": "VCPU"
+        "type": "VCPU",
+        "value": "0"
       },
       {
-        "value": "2048",
-        "type": "MEMORY"
+        "type": "MEMORY",
+        "value": "0"
       }
     ],
     "networkConfiguration": {
-        "assignPublicIp": "ENABLED"
+      "assignPublicIp": "ENABLED"
     },
     "fargatePlatformConfiguration": {
       "platformVersion": "LATEST"
     }
+  },
+  "retryStrategy": {
+    "attempts": 5
+  },
+  "timeout": {
+    "attemptDurationSeconds": 604800
   },
   "platformCapabilities": [
     "FARGATE"

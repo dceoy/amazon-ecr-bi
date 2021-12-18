@@ -4,7 +4,7 @@ on:
     branches:
       - main
   workflow_dispatch:
-name: CI to Amazon ECR
+name: CI to Amazon ECR and AWS Batch
 jobs:
   deploy:
     name: Deploy
@@ -40,7 +40,7 @@ jobs:
               && docker image push "${ECR_REGISTRY}/${i}:${IMAGE_TAG}"
             echo "::set-output name=image::${ECR_REGISTRY}/${i}:${IMAGE_TAG}"
           done
-      - name: Create
+      - name: Register job definitions for AWS Batch
         env:
           ECR_REGISTRY: ${{ steps.login-amazon-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
