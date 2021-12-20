@@ -44,20 +44,20 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-amazon-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
-          JOB_ROLE_ARN: ${{ secrets.JOB_ROLE_ARN }}
-          EXECUTION_ROLE_ARN: ${{ secrets.EXECUTION_ROLE_ARN }}
+          BATCH_JOB_ROLE_ARN: ${{ secrets.BATCH_JOB_ROLE_ARN }}
+          BATCH_EXECUTION_ROLE_ARN: ${{ secrets.BATCH_EXECUTION_ROLE_ARN }}
         run: |
           for i in $(ls ./build); do
             for p in 'ec2' 'fargate'; do
               cat template/${p}.job-definition.j2.json \
                 | jq ".jobDefinitionName=\"${p}-${i}\"" \
                 | jq ".containerProperties.image=\"${ECR_REGISTRY}/${i}:${IMAGE_TAG}\"" \
-                | jq ".containerProperties.jobRoleArn=\"${JOB_ROLE_ARN}\"" \
-                | jq ".containerProperties.executionRoleArn=\"${EXECUTION_ROLE_ARN}\"" \
+                | jq ".containerProperties.jobRoleArn=\"${BATCH_JOB_ROLE_ARN}\"" \
+                | jq ".containerProperties.executionRoleArn=\"${BATCH_EXECUTION_ROLE_ARN}\"" \
                 | tee "${i}.${p}.job-definition.json"
               aws batch register-job-definition --cli-input-json "file://${i}.${p}.job-definition.json"
               aws batch describe-job-definitions --job-definition-name "${p}-${i}" \
-                | sed -ne 's/^ \+"revision": \([0-9]\+\),$/\1/p;' \
+                | jq '.jobDefinitions[] | select(.status == "ACTIVE").revision' \
                 | sed -e '1d' \
                 | xargs -t -I{} aws batch deregister-job-definition --job-definition "${p}-${i}:{}"
             done
