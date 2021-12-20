@@ -56,5 +56,9 @@ jobs:
                 | jq ".containerProperties.executionRoleArn=\"${EXECUTION_ROLE_ARN}\"" \
                 | tee "${i}.${p}.job-definition.json"
               aws batch register-job-definition --cli-input-json "file://${i}.${p}.job-definition.json"
+              aws batch describe-job-definitions --job-definition-name "${p}-${i}" \
+                | sed -ne 's/^ \+"revision": \([0-9]\+\),$/\1/p;' \
+                | sed -e '1d' \
+                | xargs -t -I{} aws batch deregister-job-definition --job-definition "${p}-${i}:{}"
             done
           done
