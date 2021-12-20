@@ -2,6 +2,7 @@ FROM dceoy/ftarc:latest
 
 ADD https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip /tmp/awscli.zip
 ADD https://raw.githubusercontent.com/dceoy/s3-sync-entrypoint/main/s3-sync-entrypoint /usr/local/bin/s3-sync-entrypoint
+ADD https://raw.githubusercontent.com/dceoy/replace-sam-read-group/main/replace-sam-read-group /usr/local/bin/replace-sam-read-group
 
 RUN set -e \
       && apt-get -y update \
@@ -13,7 +14,7 @@ RUN set -e \
       && rm -rf /var/lib/apt/lists/*
 
 RUN set -e \
-      && chmod +x /usr/local/bin/s3-sync-entrypoint
+      && chmod +x /usr/local/bin/{s3-sync-entrypoint,replace-sam-read-group}
 
 RUN set -e \
       && cd /tmp \
