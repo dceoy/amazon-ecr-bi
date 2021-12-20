@@ -13,6 +13,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install jq
+        shell: bash -euox pipefail {0}
         run: |
           sudo apt-get -y update
           sudo apt-get -y install --no-install-recommends --no-install-suggests jq
@@ -29,6 +30,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-amazon-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
+        shell: bash -euox pipefail {0}
         run: |
           for i in $(ls ./build); do
             aws ecr describe-repositories --repository-names "${i}" \
@@ -46,6 +48,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
           BATCH_JOB_ROLE_ARN: ${{ secrets.BATCH_JOB_ROLE_ARN }}
           BATCH_EXECUTION_ROLE_ARN: ${{ secrets.BATCH_EXECUTION_ROLE_ARN }}
+        shell: bash -euox pipefail {0}
         run: |
           for i in $(ls ./build); do
             for p in 'ec2' 'fargate'; do
