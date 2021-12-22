@@ -36,7 +36,7 @@
     "attempts": 5
   },
   "timeout": {
-    "attemptDurationSeconds": 604800
+    "attemptDurationSeconds": 1209600
   },
   "platformCapabilities": [
     "EC2"
