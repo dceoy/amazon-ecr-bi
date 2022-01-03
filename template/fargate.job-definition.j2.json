@@ -39,7 +39,17 @@
     }
   },
   "retryStrategy": {
-    "attempts": 5
+    "attempts": 5,
+    "evaluateOnExit": [
+      {
+        "onStatusReason" :"Host EC2*",
+        "action": "RETRY"
+      },
+      {
+        "onReason" : "*",
+        "action": "EXIT"
+      }
+    ]
   },
   "timeout": {
     "attemptDurationSeconds": 1209600
