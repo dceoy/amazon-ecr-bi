@@ -21,6 +21,7 @@ RUN set -e \
       && ./aws/install
 
 RUN set -e \
+      && /opt/conda/bin/python3 -m pip uninstall -y ftarc vanqc sagvc \
       && /opt/conda/bin/python3 -m pip install -U --no-cache-dir \
         https://github.com/dceoy/ftarc/archive/main.tar.gz \
         https://github.com/dceoy/vanqc/archive/main.tar.gz \
