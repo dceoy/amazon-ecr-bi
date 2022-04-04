@@ -32,7 +32,7 @@
       }
     ],
     "networkConfiguration": {
-      "assignPublicIp": "ENABLED"
+      "assignPublicIp": "DISABLED"
     },
     "fargatePlatformConfiguration": {
       "platformVersion": "LATEST"
