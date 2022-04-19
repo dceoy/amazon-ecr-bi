@@ -35,11 +35,10 @@ jobs:
           for i in $(ls ./build); do
             aws ecr describe-repositories --repository-names "${i}" \
               || aws ecr create-repository --repository-name "${i}"
-            docker-compose build "${i}" \
-              && docker image tag "${{ github.repository_owner }}/${i}:latest" "${ECR_REGISTRY}/${i}:latest" \
-              && docker image tag "${ECR_REGISTRY}/${i}:latest" "${ECR_REGISTRY}/${i}:${IMAGE_TAG}" \
-              && docker image push "${ECR_REGISTRY}/${i}:latest" \
-              && docker image push "${ECR_REGISTRY}/${i}:${IMAGE_TAG}"
+            docker image build --tag "${ECR_REGISTRY}/${i}:${IMAGE_TAG}" ./build \
+              && docker image tag "${ECR_REGISTRY}/${i}:${IMAGE_TAG}" "${ECR_REGISTRY}/${i}:latest" \
+              && docker image push "${ECR_REGISTRY}/${i}:${IMAGE_TAG}" \
+              && docker image push "${ECR_REGISTRY}/${i}:latest"
             echo "::set-output name=image::${ECR_REGISTRY}/${i}:${IMAGE_TAG}"
           done
       - name: Register job definitions for AWS Batch
